@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="text-center mt-4">Votre panier</h1>
+
+    {% if not app.user %}
+        <div class="alert alert-info" role="alert">
+            Veuillez vous connecter pour commander.
+        </div>
+    {% else %}
+        {% if items %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Description</th>
+                        <th>Couleur</th>
+                        <th>Taille</th>
+                        <th>Collection</th>
+                        <th>Image</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Stock</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.produit.titre }}</td>
+                            <td>{{ item.produit.description|raw }}</td>
+                            <td>{{ item.produit.couleur|default('N/A') }}</td>
+                            <td>{{ item.produit.taille }}</td>
+                            <td>{{ item.produit.collection }}</td>
+                            <td>
+                                <img src="{{ asset('uploads/photos/' ~ item.produit.photo) }}"
+                                     alt="{{ item.produit.titre }}"
+                                     class="img-fluid"
+                                     style="max-width: 100px; max-height: 100px;">
+                            </td>
+                            <td>{{ item.produit.prix / 100|number_format() }} €</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.produit.stock }}</td>
+                            <td>{{ item.produit.prix * item.quantity / 100|number_format() }} €</td>
+                            <td>
+                                <a href="{{ path('cart_remove', {id: item.produit.id}) }}" class="btn btn-sm btn-danger">x</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h5 class="text-end">Montant total : {{ montant / 100|number_format() }} €</h5>
+            <a href="{{ path('validation_commande') }}" class="btn btn-primary">Valider la commande</a>
+        {% else %}
+            <p>Votre panier est vide</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

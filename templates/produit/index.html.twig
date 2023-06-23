@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block titre %}Bienvenue sur Myshop{% endblock %}
+
+{% block body %}
+<div class="container mt-3">
+    <h1 class="text-center">Liste des produits</h1>
+    <div class="row">
+
+        {% for produit in lesProduits %}
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header"> 
+                    
+                    <h3>{{ produit.titre }}</h3> 
+                    <img src="{{ asset('uploads/photos/' ~ produit.photo) }}"  alt="" class="img-fluid">
+                    </div>
+                    <div class="card-body">
+                        <div class="text-end">{{ produit.prix / 100|number_format() }}€</div>
+                        <div class="text-center my-3">
+                            <a href="{{ path('cart_add', {id: produit.id}) }}" class="btn btn-primary">Ajouter au panier</a>
+                            <a href="{{ path('produit_show', {id: produit.id}) }}" class="btn btn-danger">Voir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
